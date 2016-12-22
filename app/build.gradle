@@ -1,0 +1,108 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+    defaultConfig {
+        applicationId "sriparna.hillhouse.com.multidextest"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+               exclude '**/Sample.java'
+            }
+        }
+    }
+}
+
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:multidex:1.0.1'
+    testCompile 'junit:junit:4.12'
+}
+
+tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->
+
+
+    //pkgTask.jniFolders = new HashSet<File>()
+    //pkgTask.jniFolders.add(new File(projectDir, 'libs'))
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'assembleDebug') {
+        println "assembledebug task added"
+        task.doLast {
+            println "assembleDebug task ended"
+        }
+        task.doFirst {
+            println "assembleDebug task started"
+            println projectDir.absolutePath
+            File file = new File(projectDir,"dexfiles/")
+            println file.exists()
+            println file.isDirectory()
+            println file.absolutePath
+        }
+
+    }
+
+    if (task.name == 'packageDebug'){
+        println "packateg task added"
+        task.onlyIf {
+            boolean shouldExecute = project.hasProperty("done")
+            Task pkgTask = (com.android.build.gradle.tasks.PackageApplication)task;
+
+            if (shouldExecute == true){
+                if (pkgTask.dexFolders == null){
+                    pkgTask.dexFolders = new HashSet<File>()
+                    pkgTask.dexFolders.add(new File(projectDir,"dexfiles"))
+                }
+                else{
+                    println pkgTask.dexFolders.size()
+                    HashSet<File> newFiles = new HashSet<File>()
+                    newFiles.addAll(pkgTask.dexFolders);
+                    newFiles.add(new File(projectDir,"dexfiles"))
+                    pkgTask.dexFolders = newFiles
+                }
+
+
+
+            }
+
+           return shouldExecute
+        }
+
+        task.doLast {
+            println "package task ended"
+        }
+        task.doFirst {
+            println "package task started"
+        }
+    }
+
+    if (task.name == 'validateSigningDebug'){
+        println "validatesigningdebug task added"
+        task.onlyIf {
+            project.hasProperty("done")
+
+        }
+    }
+}
