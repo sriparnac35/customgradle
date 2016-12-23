@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 import dalvik.system.DexClassLoader;
@@ -34,10 +35,12 @@ public class MainActivity extends Activity {
                 try {
                     Class myClass = classLoader.loadClass("sriparna.hillhouse.com.multidextest.Sample");
                     try {
-                        String name = (String)myClass.getDeclaredField(FIELD).get(null);
-                        Toast.makeText(MainActivity.this,
-                                "the provided value is : "+name,Toast.LENGTH_LONG).show();
-
+                        Field field = myClass.getDeclaredField(FIELD);
+                        if (field != null){
+                            String data = (String)field.get(null);
+                            Toast.makeText(MainActivity.this,
+                                    "the provided value is : "+data,Toast.LENGTH_LONG).show();
+                        }
                     }catch (NoSuchFieldException e){
                         e.printStackTrace();
                     }catch (IllegalAccessException e) {
