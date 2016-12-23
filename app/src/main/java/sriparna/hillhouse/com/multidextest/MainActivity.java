@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import dalvik.system.DexClassLoader;
 
 public class MainActivity extends Activity {
+    private static final String FIELD = "name";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +34,13 @@ public class MainActivity extends Activity {
                 try {
                     Class myClass = classLoader.loadClass("sriparna.hillhouse.com.multidextest.Sample");
                     try {
-                        myClass.getDeclaredMethods()[0].invoke(null, MainActivity.this);
-                    } catch (IllegalAccessException e) {
+                        String name = (String)myClass.getDeclaredField(FIELD).get(null);
+                        Toast.makeText(MainActivity.this,
+                                "the provided value is : "+name,Toast.LENGTH_LONG).show();
+
+                    }catch (NoSuchFieldException e){
                         e.printStackTrace();
-                    } catch (InvocationTargetException e) {
+                    }catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
 
