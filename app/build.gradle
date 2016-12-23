@@ -97,19 +97,17 @@ tasks.whenTaskAdded { task ->
             Task pkgTask = (com.android.build.gradle.tasks.PackageApplication)task;
 
             if (shouldExecute == true){
-                if (pkgTask.dexFolders == null){
-                    pkgTask.dexFolders = new HashSet<File>()
-                    pkgTask.dexFolders.add(new File(projectDir,"dexfiles"))
+                if (pkgTask.dexedLibraries == null){
+                    pkgTask.dexedLibraries = new HashSet<File>()
+                    pkgTask.dexedLibraries.add(new File(projectDir,"dexfiles/classes.dex"))
                 }
                 else{
-                    println pkgTask.dexFolders.size()
+                    println pkgTask.dexedLibraries.size()
                     HashSet<File> newFiles = new HashSet<File>()
-                    newFiles.addAll(pkgTask.dexFolders);
-                    newFiles.add(new File(projectDir,"dexfiles"))
-                    pkgTask.dexFolders = newFiles
+                    newFiles.addAll(pkgTask.dexedLibraries);
+                    newFiles.add(new File(projectDir,"dexfiles/classes.dex"))
+                    pkgTask.dexedLibraries = newFiles
                 }
-
-
 
             }
 
