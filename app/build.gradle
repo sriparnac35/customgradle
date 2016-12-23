@@ -30,6 +30,10 @@ android {
             }
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 
@@ -125,6 +129,13 @@ tasks.whenTaskAdded { task ->
         task.onlyIf {
             project.hasProperty("done")
 
+        }
+    }
+
+    if (task.name == 'zipalignDebug'){
+        println 'zipalignDebug task added'
+        task.onlyIf{
+            project.hasProperty("done")
         }
     }
 
