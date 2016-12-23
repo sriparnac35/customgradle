@@ -1,5 +1,6 @@
 package sriparna.hillhouse.com.multidextest;
 
+import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import dalvik.system.DexClassLoader;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
