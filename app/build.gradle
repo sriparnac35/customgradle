@@ -39,10 +39,14 @@ android {
 android.applicationVariants.all{ variant ->
     variant.outputs.each{ output ->
 
-        output.outputFile = new File(output.outputFile.parent + (String)project.property("ouri"),"rc.apk")
-        println "output found"
-        String o = (String)project.property("ouri")
-        print "this is the result " + o
+        if (project.hasProperty("ouri")){
+            output.outputFile = new File(output.outputFile.parent + (String)project.property("ouri"),"rc.apk")
+            println "output found"
+            String o = (String)project.property("ouri")
+            print "this is the result " + o
+
+        }
+
 
 
     }
