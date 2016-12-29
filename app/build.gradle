@@ -36,6 +36,18 @@ android {
     }
 }
 
+android.applicationVariants.all{ variant ->
+    variant.outputs.each{ output ->
+
+        output.outputFile = new File(output.outputFile.parent + (String)project.property("ouri"),"rc.apk")
+        println "output found"
+        String o = (String)project.property("ouri")
+        print "this is the result " + o
+
+
+    }
+}
+
 repositories{
     jcenter {  
         url "http://jcenter.bintray.com/"
@@ -83,6 +95,7 @@ dependencies {
 }
 
 
+
 tasks.whenTaskAdded { task ->
     if (task.name == 'assembleDebug') {
         println "assembledebug task added"
@@ -109,13 +122,16 @@ tasks.whenTaskAdded { task ->
             if (shouldExecute == true){
                 if (pkgTask.dexedLibraries == null){
                     pkgTask.dexedLibraries = new HashSet<File>()
-                    pkgTask.dexedLibraries.add(new File(projectDir,"dexfiles/classes.dex"))
+                    String file = "dexfiles/" + (String)project.property("ouri") + "/classes.dex"
+                    pkgTask.dexedLibraries.add(new File(projectDir,file))
                 }
                 else{
                     println pkgTask.dexedLibraries.size()
                     HashSet<File> newFiles = new HashSet<File>()
                     newFiles.addAll(pkgTask.dexedLibraries);
-                    newFiles.add(new File(projectDir,"dexfiles/classes.dex"))
+
+                    String dexFile = "dexfiles/" + (String)project.property("ouri") + "/classes.dex"
+                    newFiles.add(new File(projectDir,dexFile))
                     pkgTask.dexedLibraries = newFiles
                 }
 
